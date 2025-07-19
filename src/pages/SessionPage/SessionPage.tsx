@@ -1,56 +1,78 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Question, Answer, Button } from "@/shared/ui";
-import type { Question as QuestionType } from "@/entities";
+import type {
+	Question as QuestionType,
+	QuestionResult,
+	User,
+} from "@/entities";
+import { fetchQuestionsBySession, submitAnswer } from "@/shared/api";
+import { loadUser } from "@/shared/lib";
 import styles from "./SessionPage.module.css";
 
 export const SessionPage = () => {
 	const { sessionId } = useParams<{ sessionId: string }>();
 	const navigate = useNavigate();
 
-	// 임시 데이터 - 실제로는 API에서 가져올 데이터
-	const questions: QuestionType[] = [
-		{
-			id: "1",
-			title: "React의 주요 특징은 무엇인가요?",
-			description: "React의 가장 중요한 특징을 선택하세요.",
-			answerType: "multiple-choice",
-			selectionMode: "single",
-			options: [
-				{ id: "a", text: "가상 DOM" },
-				{ id: "b", text: "컴포넌트 기반" },
-				{ id: "c", text: "단방향 데이터 흐름" },
-				{ id: "d", text: "모두 해당" },
-			],
-			correctAnswer: "d",
-			order: 1,
-		},
-		{
-			id: "2",
-			title: "useState 훅에 대해 설명하세요.",
-			answerType: "subjective",
-			order: 2,
-		},
-		{
-			id: "3",
-			title: "React에서 사용되는 개념들을 모두 선택하세요.",
-			answerType: "multiple-choice",
-			selectionMode: "multiple",
-			options: [
-				{ id: "a", text: "JSX" },
-				{ id: "b", text: "Props" },
-				{ id: "c", text: "State" },
-				{ id: "d", text: "Component" },
-			],
-			correctAnswer: ["a", "b", "c", "d"],
-			order: 3,
-		},
-	];
-
+	const [questions, setQuestions] = useState<QuestionType[]>([]);
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 	const [answers, setAnswers] = useState<Record<string, string | string[]>>(
 		{}
 	);
+	const [results, setResults] = useState<QuestionResult[]>([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const [currentUser, setCurrentUser] = useState<User | null>(null);
+
+	useEffect(() => {
+		const loadData = async () => {
+			try {
+				// 사용자 정보 확인
+				const user = loadUser();
+				if (!user) {
+					navigate("/", { replace: true });
+					return;
+				}
+				setCurrentUser(user);
+
+				// 문제 데이터 로드
+				if (sessionId) {
+					const questionsData = await fetchQuestionsBySession(
+						sessionId
+					);
+					setQuestions(questionsData);
+				}
+			} catch (error) {
+				console.error("데이터 로드 실패:", error);
+			} finally {
+				setIsLoading(false);
+			}
+		};
+
+		loadData();
+	}, [sessionId, navigate]);
+
+	if (isLoading) {
+		return (
+			<div className={styles.container}>
+				<div className={styles.loading}>
+					<p>문제를 불러오는 중...</p>
+				</div>
+			</div>
+		);
+	}
+
+	if (questions.length === 0) {
+		return (
+			<div className={styles.container}>
+				<div className={styles.error}>
+					<p>문제를 불러올 수 없습니다.</p>
+					<Button onClick={() => navigate("/")}>
+						홈으로 돌아가기
+					</Button>
+				</div>
+			</div>
+		);
+	}
 
 	const currentQuestion = questions[currentQuestionIndex];
 	const isLastQuestion = currentQuestionIndex === questions.length - 1;
@@ -62,13 +84,69 @@ export const SessionPage = () => {
 		}));
 	};
 
-	const handleNext = () => {
-		if (isLastQuestion) {
-			// 결과 페이지로 이동하거나 결과 처리
-			console.log("모든 답변:", answers);
-			navigate("/");
-		} else {
-			setCurrentQuestionIndex((prev) => prev + 1);
+	const handleNext = async () => {
+		const currentAnswer = answers[currentQuestion.id];
+
+		if (!currentUser || !currentAnswer) return;
+
+		try {
+			// 정답 제출 및 확인
+			const { isCorrect, submittedAt } = await submitAnswer(
+				currentUser.id,
+				currentQuestion.id,
+				sessionId!,
+				currentAnswer,
+				currentQuestion.correctAnswer!
+			);
+
+			// 결과 저장
+			const questionResult: QuestionResult = {
+				question: currentQuestion,
+				userAnswer: currentAnswer,
+				isCorrect,
+				submittedAt: new Date(submittedAt),
+			};
+
+			const newResults = [...results, questionResult];
+			setResults(newResults);
+
+			if (isLastQuestion) {
+				// 모든 문제 완료 - 결과 페이지로 이동
+				navigate(`/result/${sessionId}`, {
+					state: {
+						results: newResults,
+						sessionTitle: `${sessionId}차시`,
+					},
+					replace: true,
+				});
+			} else {
+				// 다음 문제로 이동
+				setCurrentQuestionIndex((prev) => prev + 1);
+			}
+		} catch (error) {
+			console.error("답안 제출 실패:", error);
+			// 에러 발생해도 다음 문제로 진행 (로컬 결과만 저장)
+			const questionResult: QuestionResult = {
+				question: currentQuestion,
+				userAnswer: currentAnswer,
+				isCorrect: false, // 에러 시 오답 처리
+				submittedAt: new Date(),
+			};
+
+			const newResults = [...results, questionResult];
+			setResults(newResults);
+
+			if (isLastQuestion) {
+				navigate(`/result/${sessionId}`, {
+					state: {
+						results: newResults,
+						sessionTitle: `${sessionId}차시`,
+					},
+					replace: true,
+				});
+			} else {
+				setCurrentQuestionIndex((prev) => prev + 1);
+			}
 		}
 	};
 

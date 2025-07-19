@@ -3,4 +3,5 @@ export type {
 	QuestionSession,
 	UserAnswer,
 	UserProgress,
+	QuestionResult,
 } from "./types";

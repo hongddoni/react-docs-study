@@ -1,4 +1,4 @@
-import { AnswerType, SelectionMode, AnswerOption } from "@/shared/ui";
+import type { AnswerType, SelectionMode, AnswerOption } from "@/shared/ui";
 
 export interface Question {
 	id: string;
@@ -9,6 +9,7 @@ export interface Question {
 	selectionMode?: SelectionMode;
 	options?: AnswerOption[];
 	correctAnswer?: string | string[];
+	explanation?: string; // 해설 필드 추가
 	order: number;
 }
 
@@ -40,4 +41,12 @@ export interface UserProgress {
 	isCompleted: boolean;
 	startedAt: Date;
 	completedAt?: Date;
+}
+
+// 결과 페이지용 타입 추가
+export interface QuestionResult {
+	question: Question;
+	userAnswer: string | string[];
+	isCorrect: boolean;
+	submittedAt: Date;
 }

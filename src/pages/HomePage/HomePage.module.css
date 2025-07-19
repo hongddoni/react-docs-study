@@ -42,6 +42,11 @@
   align-items: center;
 }
 
+.userActions {
+  display: flex;
+  gap: 8px;
+}
+
 .userInfo h3 {
   margin: 0;
   font-size: 18px;
