@@ -11,6 +11,7 @@ export interface Question {
 	correctAnswer?: string | string[];
 	explanation?: string; // 해설 필드 추가
 	order: number;
+	sessionId: string;
 }
 
 export interface QuestionSession {

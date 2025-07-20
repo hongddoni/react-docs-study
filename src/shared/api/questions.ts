@@ -30,11 +30,11 @@ export const fetchQuestionsBySession = async (
 			correctAnswer: dbQuestion.correct_answer,
 			explanation: dbQuestion.explanation,
 			order: dbQuestion.order,
+			sessionId: dbQuestion.session_id,
 		}));
 	} catch (error) {
 		console.error("문제 불러오기 실패:", error);
-		// 개발용 임시 데이터 반환
-		return getTemporaryQuestions(sessionId);
+		return [];
 	}
 };
 
@@ -115,51 +115,70 @@ const checkAnswer = (
 	return false;
 };
 
-// 개발용 임시 데이터 (Supabase 연결 실패시 사용)
-const getTemporaryQuestions = (sessionId: string): Question[] => {
-	const baseQuestions: Question[] = [
-		{
-			id: "1",
-			title: "React의 주요 특징은 무엇인가요?",
-			description: "React의 가장 중요한 특징을 선택하세요.",
-			answerType: "multiple-choice",
-			selectionMode: "single",
-			options: [
-				{ id: "a", text: "가상 DOM" },
-				{ id: "b", text: "컴포넌트 기반" },
-				{ id: "c", text: "단방향 데이터 흐름" },
-				{ id: "d", text: "모두 해당" },
-			],
-			correctAnswer: "d",
-			explanation:
-				"React는 가상 DOM, 컴포넌트 기반 아키텍처, 단방향 데이터 흐름 모두를 특징으로 합니다.",
-			order: 1,
-		},
-		{
-			id: "2",
-			title: "useState 훅에 대해 설명하세요.",
-			answerType: "subjective",
-			explanation:
-				"useState는 함수형 컴포넌트에서 상태를 관리할 수 있게 해주는 React Hook입니다.",
-			order: 2,
-		},
-		{
-			id: "3",
-			title: "React에서 사용되는 개념들을 모두 선택하세요.",
-			answerType: "multiple-choice",
-			selectionMode: "multiple",
-			options: [
-				{ id: "a", text: "JSX" },
-				{ id: "b", text: "Props" },
-				{ id: "c", text: "State" },
-				{ id: "d", text: "Component" },
-			],
-			correctAnswer: ["a", "b", "c", "d"],
-			explanation:
-				"JSX, Props, State, Component 모두 React의 핵심 개념들입니다.",
-			order: 3,
-		},
-	];
+export const createQuestion = async (
+	question: Omit<Question, "id" | "order">
+): Promise<Question | null> => {
+	try {
+		// 같은 세션의 기존 문제들 중 최대 order 값 조회
+		const { data: existingQuestions, error: orderError } = await supabase
+			.from("questions")
+			.select("order")
+			.eq("session_id", question.sessionId)
+			.order("order", { ascending: false })
+			.limit(1);
 
-	return baseQuestions;
+		let nextOrder = 1; // 기본값
+		if (!orderError && existingQuestions && existingQuestions.length > 0) {
+			nextOrder = existingQuestions[0].order + 1;
+		}
+
+		// Supabase에서 UUID 자동 생성을 위해 id 필드 제외, order는 자동 계산
+		const questionData = {
+			title: question.title,
+			description: question.description,
+			image_url: question.imageUrl,
+			answer_type: question.answerType,
+			selection_mode: question.selectionMode,
+			options: question.options,
+			correct_answer: question.correctAnswer,
+			explanation: question.explanation,
+			order: nextOrder,
+			session_id: question.sessionId,
+			created_at: new Date().toISOString(),
+			updated_at: new Date().toISOString(),
+		};
+
+		const { data, error } = await supabase
+			.from("questions")
+			.insert([questionData])
+			.select()
+			.single();
+
+		if (error) {
+			console.error("Supabase 문제 생성 실패:", error);
+			return null;
+		}
+
+		console.log("문제가 성공적으로 생성되었습니다:", data);
+
+		// 데이터베이스 형식을 Question 타입으로 변환
+		const questionResult: Question = {
+			id: data.id,
+			title: data.title,
+			description: data.description,
+			imageUrl: data.image_url,
+			answerType: data.answer_type,
+			selectionMode: data.selection_mode,
+			options: data.options,
+			correctAnswer: data.correct_answer,
+			explanation: data.explanation,
+			order: data.order,
+			sessionId: data.session_id,
+		};
+
+		return questionResult;
+	} catch (error) {
+		console.error("문제 생성 중 예상치 못한 오류:", error);
+		return null;
+	}
 };

@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { HomePage, SessionPage, ResultPage, SignUpPage } from "./pages";
+import { HomePage, SessionPage, ResultPage, CreateProblemPage } from "./pages";
 
 function App() {
 	const queryClient = new QueryClient();
@@ -14,7 +14,11 @@ function App() {
 						element={<SessionPage />}
 					/>
 					<Route path="/result/:sessionId" element={<ResultPage />} />
-					<Route path="/signup" element={<SignUpPage />} />
+					<Route
+						path="/create-problem"
+						element={<CreateProblemPage />}
+					/>
+
 					{/* 404 처리 */}
 					<Route path="*" element={<Navigate to="/" replace />} />
 				</Routes>

@@ -1,0 +1,229 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding: 20px 0;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.section {
+  background-color: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 20px 0;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 8px;
+}
+
+.field {
+  margin-bottom: 20px;
+}
+
+.field:last-child {
+  margin-bottom: 0;
+}
+
+/* 라디오 버튼 그룹 */
+.radioGroup {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.radioLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  user-select: none;
+  background-color: white;
+}
+
+.radioLabel:hover {
+  border-color: #007bff;
+  background-color: #f8f9ff;
+}
+
+.radioLabel input[type="radio"]:checked + span,
+.radioLabel input[type="checkbox"]:checked + span {
+  font-weight: 600;
+  color: #007bff;
+}
+
+.radioLabel input[type="radio"]:checked,
+.radioLabel input[type="checkbox"]:checked {
+  accent-color: #007bff;
+}
+
+.radioLabel input[type="radio"],
+.radioLabel input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.radioLabel span {
+  font-size: 16px;
+  color: #333;
+}
+
+/* 선택지 관리 */
+.optionsContainer {
+  margin-top: 20px;
+}
+
+.optionsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.optionsHeader h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.optionItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+}
+
+.optionLabel {
+  font-weight: 600;
+  color: #666;
+  min-width: 20px;
+  text-align: center;
+}
+
+.optionItem .container {
+  flex: 1;
+}
+
+/* 정답 선택 섹션 */
+.correctAnswerSection {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.correctAnswerSection h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 16px 0;
+}
+
+.correctAnswerOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.correctAnswerOptions .radioLabel {
+  justify-content: flex-start;
+  padding: 12px;
+}
+
+/* 에러 메시지 */
+.errorMessage {
+  color: #dc3545;
+  font-size: 14px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+}
+
+/* 저장 섹션 */
+.saveSection {
+  background-color: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+    max-width: 100%;
+  }
+  
+  .header {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+  
+  .title {
+    font-size: 20px;
+  }
+  
+  .section {
+    padding: 20px;
+  }
+  
+  .radioGroup {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .optionItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .optionLabel {
+    align-self: flex-start;
+  }
+  
+  .optionsHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
