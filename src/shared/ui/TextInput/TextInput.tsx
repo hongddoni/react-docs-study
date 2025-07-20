@@ -24,7 +24,7 @@ export const TextInput: FC<TextInputProps> = ({
 	type = "text",
 	maxLength,
 }) => {
-	  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		onChange(e.target.value);
 	};
 

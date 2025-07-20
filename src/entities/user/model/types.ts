@@ -2,12 +2,10 @@ export interface User {
 	id: string;
 	name: string;
 	email?: string;
-	permissions: string[];
-	createdAt: Date;
+	createdAt: string;
 }
 
 export interface UserSession {
 	user: User;
 	isAuthenticated: boolean;
-	permissions: string[];
 }

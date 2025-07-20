@@ -3,7 +3,6 @@ import { createClient } from "@supabase/supabase-js";
 // 환경변수 또는 임시 설정 (실제 사용시에는 환경변수로 관리)
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_KEY;
-
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Supabase 데이터베이스 타입 정의

@@ -1,0 +1,10 @@
+  .userInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .userActions {
+    display: flex;
+    gap: 8px;
+  }
