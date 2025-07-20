@@ -40,6 +40,23 @@ export const CreateProblemPage = () => {
 		sessionId: "",
 	});
 
+	const clearForm = () => {
+		setForm({
+			title: "",
+			description: "",
+			imageUrl: "",
+			answerType: "multiple-choice",
+			selectionMode: "single",
+			options: [
+				{ id: "a", text: "" },
+				{ id: "b", text: "" },
+			],
+			correctAnswer: [],
+			explanation: "",
+			sessionId: "",
+		});
+	};
+
 	const [errors, setErrors] = useState<Record<string, string>>({});
 
 	const updateForm = (field: keyof QuestionForm, value: any) => {
@@ -133,6 +150,7 @@ export const CreateProblemPage = () => {
 
 			if (savedQuestion) {
 				console.log("문제가 성공적으로 저장되었습니다:", savedQuestion);
+				clearForm();
 			} else {
 				alert("문제 저장에 실패했습니다. 다시 시도해주세요.");
 			}

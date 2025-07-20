@@ -194,13 +194,13 @@ export const SessionPage = () => {
 				/>
 
 				<div className={styles.navigation}>
-					<Button
+					{/* <Button
 						variant="secondary"
 						onClick={handlePrevious}
 						disabled={currentQuestionIndex === 0}
 					>
 						이전
-					</Button>
+					</Button> */}
 
 					<Button
 						variant="primary"
