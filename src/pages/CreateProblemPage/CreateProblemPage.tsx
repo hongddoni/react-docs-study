@@ -37,7 +37,7 @@ export const CreateProblemPage = () => {
 		],
 		correctAnswer: [],
 		explanation: "",
-		sessionId: "",
+		sessionId: "1",
 	});
 
 	const clearForm = () => {
@@ -53,7 +53,7 @@ export const CreateProblemPage = () => {
 			],
 			correctAnswer: [],
 			explanation: "",
-			sessionId: "",
+			sessionId: "1",
 		});
 	};
 
