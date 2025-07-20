@@ -3,7 +3,7 @@ import { useLogin } from "../LoginProvider";
 import { Button, TextInput } from "@/shared/ui";
 import { useCallback, useState } from "react";
 import { supabase } from "@/shared/api";
-import { saveUser } from "@/shared/lib";
+import { clearUser, saveUser } from "@/shared/lib";
 
 export const Profile = () => {
 	const { currentUser, setCurrentUser } = useLogin();
@@ -29,6 +29,7 @@ export const Profile = () => {
 
 	const handleLogout = useCallback(() => {
 		setCurrentUser(null);
+		clearUser();
 	}, [setCurrentUser]);
 
 	if (!currentUser?.name) {

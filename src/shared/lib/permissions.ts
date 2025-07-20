@@ -1,4 +1,5 @@
 import type { User } from "@/entities";
+import { supabase } from "../api";
 
 export const PERMISSIONS = {
 	SESSION_1: "session_1",
@@ -9,30 +10,30 @@ export const PERMISSIONS = {
 
 export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
 
-export const hasPermission = (
-	user: User | null,
-	requiredPermission: string
-): boolean => {
-	if (!user) return false;
-	if (user?.permissions?.includes(PERMISSIONS.ADMIN)) return true;
-	return user?.permissions?.includes(requiredPermission);
-};
-
-export const canAccessSession = (
+export const canAccessSession = async (
 	user: User | null,
 	sessionNumber: number
-): boolean => {
+) => {
 	if (!user) return false;
 
-	// 관리자는 모든 세션에 접근 가능
+	const { data, error } = await supabase
+		.from("access_permission")
+		.select("*")
+		.eq("id", user.id)
+		.single();
 
-	// 기본적으로 1차시는 모두 접근 가능
-	if (sessionNumber === 1) return true;
+	if (error) {
+		console.error(error);
+		return false;
+	}
 
-	// 2차시 이상은 해당 권한이 필요
-	const requiredPermission = `session_${sessionNumber}`;
-	// return user.permissions.includes(requiredPermission);
-	//todo: 권한 체크 로직 추가
+	if (!data) return false;
+
+	// 마지막 세션부터 시작 가능
+	const lastSession = data?.access.lastSession;
+
+	if (sessionNumber > lastSession) return false;
+
 	return true;
 };
 

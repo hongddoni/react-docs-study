@@ -18,7 +18,16 @@ export const SignUp = () => {
 			!confirmPassword.trim() ||
 			password !== confirmPassword
 		);
-	}, [name, email, password, confirmPassword]);
+	}, [email, password, confirmPassword]);
+
+	const insertSession = useCallback(async (id: string) => {
+		await supabase.from("access_permission").insert({
+			id,
+			access: {
+				lastSession: 1,
+			},
+		});
+	}, []);
 
 	const hasUser = useCallback(async () => {
 		const { data } = await supabase.auth.signInWithPassword({
@@ -36,7 +45,7 @@ export const SignUp = () => {
 		}
 
 		try {
-			const { error } = await supabase.auth.signUp({
+			const { data, error } = await supabase.auth.signUp({
 				email,
 				password,
 			});
@@ -51,9 +60,10 @@ export const SignUp = () => {
 				return;
 			}
 
-			await supabase.auth.updateUser({
-				data: { name },
-			});
+			if (data.user) {
+				await insertSession(data.user.id);
+			}
+
 			navigate("/");
 		} catch (error) {
 			console.error(error);
