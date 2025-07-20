@@ -37,7 +37,7 @@ export const CreateProblemPage = () => {
 		],
 		correctAnswer: [],
 		explanation: "",
-		sessionId: "1",
+		sessionId: "2",
 	});
 
 	const clearForm = () => {
