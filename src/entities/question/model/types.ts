@@ -8,7 +8,7 @@ export interface Question {
 	answerType: AnswerType;
 	selectionMode?: SelectionMode;
 	options?: AnswerOption[];
-	correctAnswer?: string | string[];
+	correctAnswer?: string[];
 	explanation?: string; // 해설 필드 추가
 	order: number;
 	sessionId: string;

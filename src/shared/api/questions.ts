@@ -27,7 +27,9 @@ export const fetchQuestionsBySession = async (
 			answerType: dbQuestion.answer_type,
 			selectionMode: dbQuestion.selection_mode,
 			options: dbQuestion.options,
-			correctAnswer: dbQuestion.correct_answer,
+			correctAnswer: Array.isArray(dbQuestion.correct_answer)
+				? dbQuestion.correct_answer
+				: [dbQuestion.correct_answer],
 			explanation: dbQuestion.explanation,
 			order: dbQuestion.order,
 			sessionId: dbQuestion.session_id,
@@ -44,10 +46,13 @@ export const submitAnswer = async (
 	questionId: string,
 	sessionId: string,
 	answer: string | string[],
-	correctAnswer: string | string[]
+	correctAnswer: string[]
 ): Promise<{ isCorrect: boolean; submittedAt: string }> => {
 	try {
-		const isCorrect = checkAnswer(answer, correctAnswer);
+		const isCorrect = checkAnswer(
+			answer,
+			Array.isArray(correctAnswer) ? correctAnswer : [correctAnswer]
+		);
 		const submittedAt = new Date().toISOString();
 
 		const { error } = await supabase.from("user_answers").insert({
@@ -65,7 +70,10 @@ export const submitAnswer = async (
 	} catch (error) {
 		console.error("답안 제출 실패:", error);
 		// 실패해도 로컬에서 정답 확인은 수행
-		const isCorrect = checkAnswer(answer, correctAnswer);
+		const isCorrect = checkAnswer(
+			answer,
+			Array.isArray(correctAnswer) ? correctAnswer : [correctAnswer]
+		);
 		return { isCorrect, submittedAt: new Date().toISOString() };
 	}
 };
@@ -91,28 +99,36 @@ export const fetchUserAnswers = async (
 	}
 };
 
-// 정답 확인 로직
-const checkAnswer = (
+// 정답 확인 로직 (모든 정답을 배열로 관리)
+export const checkAnswer = (
 	userAnswer: string | string[],
-	correctAnswer: string | string[]
+	correctAnswer: string[]
 ): boolean => {
-	if (Array.isArray(userAnswer) && Array.isArray(correctAnswer)) {
-		// 다중 선택의 경우
-		if (userAnswer.length !== correctAnswer.length) return false;
-		return userAnswer
+	// 사용자 답변을 배열로 정규화
+	const normalizedUserAnswer = Array.isArray(userAnswer)
+		? userAnswer
+		: [userAnswer];
+
+	// 길이가 다르면 틀림
+	if (normalizedUserAnswer.length !== correctAnswer.length) return false;
+
+	// 객관식 다중 선택의 경우 (배열 요소들 비교)
+	if (
+		normalizedUserAnswer.every(
+			(ans) => typeof ans === "string" && ans.length <= 3
+		)
+	) {
+		return normalizedUserAnswer
 			.sort()
 			.every((ans, index) => ans === correctAnswer.sort()[index]);
-	} else if (
-		typeof userAnswer === "string" &&
-		typeof correctAnswer === "string"
-	) {
-		// 단일 선택 또는 주관식의 경우
-		return (
-			userAnswer.trim().toLowerCase() ===
-			correctAnswer.trim().toLowerCase()
-		);
 	}
-	return false;
+
+	// 주관식의 경우 (대소문자 무시하고 공백 제거하여 비교)
+	return normalizedUserAnswer.every(
+		(ans, index) =>
+			ans.trim().toLowerCase() ===
+			correctAnswer[index]?.trim().toLowerCase()
+	);
 };
 
 export const createQuestion = async (

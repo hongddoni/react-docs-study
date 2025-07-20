@@ -19,17 +19,10 @@ export const ResultPage = () => {
 	const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set());
 
 	useEffect(() => {
-		// 페이지 새로고침 방지 및 뒤로가기 방지
-		const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-			e.preventDefault();
-			e.returnValue = "";
-		};
-
 		const handlePopState = () => {
 			navigate("/", { replace: true });
 		};
 
-		window.addEventListener("beforeunload", handleBeforeUnload);
 		window.addEventListener("popstate", handlePopState);
 
 		// location state에서 결과 데이터 가져오기
@@ -43,7 +36,6 @@ export const ResultPage = () => {
 		}
 
 		return () => {
-			window.removeEventListener("beforeunload", handleBeforeUnload);
 			window.removeEventListener("popstate", handlePopState);
 		};
 	}, [sessionId, location.state, navigate]);
@@ -76,29 +68,21 @@ export const ResultPage = () => {
 	};
 
 	const getCorrectAnswerDisplay = (
-		correctAnswer: string | string[],
+		correctAnswer: string[],
 		question: any
 	): string => {
-		if (Array.isArray(correctAnswer)) {
-			if (question.options) {
-				const correctTexts = correctAnswer.map(
-					(id) =>
-						question.options?.find((opt: any) => opt.id === id)
-							?.text || id
-				);
-				return correctTexts.join(", ");
-			}
-			return correctAnswer.join(", ");
-		}
-
 		if (question.options && question.answerType === "multiple-choice") {
-			const correctOption = question.options.find(
-				(opt: any) => opt.id === correctAnswer
+			// 객관식: ID를 선택지 텍스트로 변환
+			const correctTexts = correctAnswer.map(
+				(id) =>
+					question.options?.find((opt: any) => opt.id === id)?.text ||
+					id
 			);
-			return correctOption ? correctOption.text : correctAnswer;
+			return correctTexts.join(", ");
 		}
 
-		return correctAnswer;
+		// 주관식: 배열의 첫 번째 요소 (보통 하나만 있음)
+		return correctAnswer.join(", ");
 	};
 
 	const getUserAnswerDisplay = (

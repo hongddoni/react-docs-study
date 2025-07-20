@@ -17,7 +17,7 @@ interface QuestionForm {
 	answerType: AnswerType;
 	selectionMode: SelectionMode;
 	options: AnswerOption[];
-	correctAnswer: string | string[];
+	correctAnswer: string[];
 	explanation: string;
 	sessionId: string;
 }
@@ -35,7 +35,7 @@ export const CreateProblemPage = () => {
 			{ id: "a", text: "" },
 			{ id: "b", text: "" },
 		],
-		correctAnswer: "",
+		correctAnswer: [],
 		explanation: "",
 		sessionId: "",
 	});
@@ -95,7 +95,7 @@ export const CreateProblemPage = () => {
 				newErrors.options = "모든 선택지를 입력하세요";
 			}
 
-			if (!form.correctAnswer) {
+			if (!form.correctAnswer || form.correctAnswer.length === 0) {
 				newErrors.correctAnswer = "정답을 선택하세요";
 			}
 		}
@@ -344,14 +344,13 @@ export const CreateProblemPage = () => {
 												type="radio"
 												name="correctAnswer"
 												value={option.id}
-												checked={
-													form.correctAnswer ===
+												checked={form.correctAnswer.includes(
 													option.id
-												}
+												)}
 												onChange={(e) =>
 													updateForm(
 														"correctAnswer",
-														e.target.value
+														[e.target.value]
 													)
 												}
 											/>
@@ -428,12 +427,15 @@ export const CreateProblemPage = () => {
 						<TextInput
 							label="정답"
 							value={
-								typeof form.correctAnswer === "string"
-									? form.correctAnswer
+								form.correctAnswer.length > 0
+									? form.correctAnswer[0]
 									: ""
 							}
 							onChange={(value) =>
-								updateForm("correctAnswer", value)
+								updateForm(
+									"correctAnswer",
+									value ? [value] : []
+								)
 							}
 							placeholder="정답을 입력하세요"
 						/>
