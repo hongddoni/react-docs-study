@@ -150,11 +150,11 @@ export const SessionPage = () => {
 		}
 	};
 
-	const handlePrevious = () => {
-		if (currentQuestionIndex > 0) {
-			setCurrentQuestionIndex((prev) => prev - 1);
-		}
-	};
+	// const handlePrevious = () => {
+	// 	if (currentQuestionIndex > 0) {
+	// 		setCurrentQuestionIndex((prev) => prev - 1);
+	// 	}
+	// };
 
 	const currentAnswer = answers[currentQuestion.id];
 	const hasAnswer =

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { Button, Question, Answer } from "@/shared/ui";
+import { Button, Question } from "@/shared/ui";
 import type { QuestionResult } from "@/entities";
 import styles from "./ResultPage.module.css";
 

@@ -82,10 +82,7 @@ export const saveAnswers = (answers: UserAnswer[]): void => {
 	localStorage.setItem(STORAGE_KEYS.ANSWERS, JSON.stringify(answers));
 };
 
-export const loadAnswers = (
-	userId: string,
-	sessionId: string
-): UserAnswer[] => {
+export const loadAnswers = (sessionId: string): UserAnswer[] => {
 	const answersData = localStorage.getItem(STORAGE_KEYS.ANSWERS);
 	if (!answersData) return [];
 
