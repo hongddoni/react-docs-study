@@ -16,7 +16,7 @@ export const ResultPage = () => {
 
 	const [results, setResults] = useState<QuestionResult[]>([]);
 	const [sessionTitle, setSessionTitle] = useState("");
-	const [currentResultIndex, setCurrentResultIndex] = useState(0);
+	const [expandedCards, setExpandedCards] = useState<Set<number>>(new Set());
 
 	useEffect(() => {
 		// 페이지 새로고침 방지 및 뒤로가기 방지
@@ -52,54 +52,48 @@ export const ResultPage = () => {
 		return null; // 데이터 로딩 중이거나 리다이렉트 중
 	}
 
-	const currentResult = results[currentResultIndex];
 	const correctCount = results.filter((r) => r.isCorrect).length;
 	const totalCount = results.length;
 	const score = Math.round((correctCount / totalCount) * 100);
-
-	const handleNext = () => {
-		if (currentResultIndex < results.length - 1) {
-			setCurrentResultIndex((prev) => prev + 1);
-		}
-	};
-
-	const handlePrevious = () => {
-		if (currentResultIndex > 0) {
-			setCurrentResultIndex((prev) => prev - 1);
-		}
-	};
 
 	const handleGoHome = () => {
 		navigate("/", { replace: true });
 	};
 
-	const getAnswerDisplay = (answer: string | string[]): string => {
-		if (Array.isArray(answer)) {
-			return answer.join(", ");
-		}
-		return answer;
+	const toggleCard = (index: number) => {
+		setExpandedCards((prev) => {
+			const newSet = new Set(prev);
+			const wasExpanded = newSet.has(index);
+			if (wasExpanded) {
+				newSet.delete(index);
+				console.log(`카드 ${index + 1} 접힘`);
+			} else {
+				newSet.add(index);
+				console.log(`카드 ${index + 1} 펼쳐짐`);
+			}
+			return newSet;
+		});
 	};
 
 	const getCorrectAnswerDisplay = (
-		correctAnswer: string | string[]
+		correctAnswer: string | string[],
+		question: any
 	): string => {
 		if (Array.isArray(correctAnswer)) {
-			const question = currentResult.question;
 			if (question.options) {
 				const correctTexts = correctAnswer.map(
 					(id) =>
-						question.options?.find((opt) => opt.id === id)?.text ||
-						id
+						question.options?.find((opt: any) => opt.id === id)
+							?.text || id
 				);
 				return correctTexts.join(", ");
 			}
 			return correctAnswer.join(", ");
 		}
 
-		const question = currentResult.question;
 		if (question.options && question.answerType === "multiple-choice") {
 			const correctOption = question.options.find(
-				(opt) => opt.id === correctAnswer
+				(opt: any) => opt.id === correctAnswer
 			);
 			return correctOption ? correctOption.text : correctAnswer;
 		}
@@ -107,24 +101,25 @@ export const ResultPage = () => {
 		return correctAnswer;
 	};
 
-	const getUserAnswerDisplay = (userAnswer: string | string[]): string => {
+	const getUserAnswerDisplay = (
+		userAnswer: string | string[],
+		question: any
+	): string => {
 		if (Array.isArray(userAnswer)) {
-			const question = currentResult.question;
 			if (question.options) {
 				const userTexts = userAnswer.map(
 					(id) =>
-						question.options?.find((opt) => opt.id === id)?.text ||
-						id
+						question.options?.find((opt: any) => opt.id === id)
+							?.text || id
 				);
 				return userTexts.join(", ");
 			}
 			return userAnswer.join(", ");
 		}
 
-		const question = currentResult.question;
 		if (question.options && question.answerType === "multiple-choice") {
 			const userOption = question.options.find(
-				(opt) => opt.id === userAnswer
+				(opt: any) => opt.id === userAnswer
 			);
 			return userOption ? userOption.text : userAnswer;
 		}
@@ -144,86 +139,142 @@ export const ResultPage = () => {
 						</span>
 					</div>
 				</div>
+				<div className={styles.homeButtonSection}>
+					<Button variant="primary" onClick={handleGoHome}>
+						홈으로
+					</Button>
+				</div>
 			</div>
 
 			<div className={styles.content}>
-				<div className={styles.questionHeader}>
-					<span className={styles.questionCounter}>
-						문제 {currentResultIndex + 1} / {totalCount}
-					</span>
-					<span
-						className={`${styles.resultBadge} ${
-							currentResult.isCorrect
-								? styles.correct
-								: styles.incorrect
-						}`}
-					>
-						{currentResult.isCorrect ? "정답" : "오답"}
-					</span>
-				</div>
+				{results.map((result, index) => {
+					const isExpanded = expandedCards.has(index);
 
-				<Question
-					title={currentResult.question.title}
-					description={currentResult.question.description}
-					imageUrl={currentResult.question.imageUrl}
-				/>
-
-				<div className={styles.answerSection}>
-					<div className={styles.answerItem}>
-						<h4 className={styles.answerLabel}>내 답안</h4>
-						<div
-							className={`${styles.answerValue} ${
-								currentResult.isCorrect
-									? styles.correctAnswer
-									: styles.wrongAnswer
-							}`}
-						>
-							{getUserAnswerDisplay(currentResult.userAnswer)}
-						</div>
-					</div>
-
-					{!currentResult.isCorrect && (
-						<div className={styles.answerItem}>
-							<h4 className={styles.answerLabel}>정답</h4>
+					return (
+						<div key={index} className={styles.resultCard}>
 							<div
-								className={`${styles.answerValue} ${styles.correctAnswer}`}
+								className={styles.questionHeader}
+								onClick={() => toggleCard(index)}
+								role="button"
+								tabIndex={0}
+								onKeyDown={(e) => {
+									if (e.key === "Enter" || e.key === " ") {
+										e.preventDefault();
+										toggleCard(index);
+									}
+								}}
 							>
-								{getCorrectAnswerDisplay(
-									currentResult.question.correctAnswer!
-								)}
+								<div className={styles.headerContent}>
+									<span className={styles.questionCounter}>
+										문제 {index + 1} / {totalCount}
+									</span>
+									<span
+										className={`${styles.resultBadge} ${
+											result.isCorrect
+												? styles.correct
+												: styles.incorrect
+										}`}
+									>
+										{result.isCorrect ? "정답" : "오답"}
+									</span>
+								</div>
+								<div className={styles.expandIcon}>
+									<span
+										className={
+											isExpanded
+												? styles.iconExpanded
+												: styles.iconCollapsed
+										}
+									>
+										▼
+									</span>
+								</div>
 							</div>
+
+							{isExpanded && (
+								<div className={styles.accordionContent}>
+									<div className={styles.questionContent}>
+										<Question
+											title={result.question.title}
+											description={
+												result.question.description
+											}
+											imageUrl={result.question.imageUrl}
+										/>
+									</div>
+									<div className={styles.answerSection}>
+										<div className={styles.answerItem}>
+											<h4 className={styles.answerLabel}>
+												내 답안
+											</h4>
+											<div
+												className={`${
+													styles.answerValue
+												} ${
+													result.isCorrect
+														? styles.correctAnswer
+														: styles.wrongAnswer
+												}`}
+											>
+												{getUserAnswerDisplay(
+													result.userAnswer,
+													result.question
+												)}
+											</div>
+										</div>
+
+										{!result.isCorrect && (
+											<div className={styles.answerItem}>
+												<h4
+													className={
+														styles.answerLabel
+													}
+												>
+													정답
+												</h4>
+												<div
+													className={`${styles.answerValue} ${styles.correctAnswer}`}
+												>
+													{getCorrectAnswerDisplay(
+														result.question
+															.correctAnswer!,
+														result.question
+													)}
+												</div>
+											</div>
+										)}
+
+										{result.question.explanation && (
+											<div
+												className={
+													styles.explanationSection
+												}
+											>
+												<h4
+													className={
+														styles.explanationLabel
+													}
+												>
+													해설
+												</h4>
+												<p
+													className={
+														styles.explanationText
+													}
+												>
+													{
+														result.question
+															.explanation
+													}
+												</p>
+											</div>
+										)}
+									</div>
+								</div>
+							)}
 						</div>
-					)}
-
-					{currentResult.question.explanation && (
-						<div className={styles.explanationSection}>
-							<h4 className={styles.explanationLabel}>해설</h4>
-							<p className={styles.explanationText}>
-								{currentResult.question.explanation}
-							</p>
-						</div>
-					)}
-				</div>
-
-				<div className={styles.navigation}>
-					<Button
-						variant="secondary"
-						onClick={handlePrevious}
-						disabled={currentResultIndex === 0}
-					>
-						이전 문제
-					</Button>
-
-					{currentResultIndex === results.length - 1 ? (
-						<Button variant="primary" onClick={handleGoHome}>
-							홈으로
-						</Button>
-					) : (
-						<Button variant="primary" onClick={handleNext}>
-							다음 문제
-						</Button>
-					)}
-				</div>
+					);
+				})}
 			</div>
 		</div>
 	);
