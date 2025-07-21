@@ -80,6 +80,13 @@ export const Profile = () => {
               문제 생성
             </Button>
           )}
+          <Button
+            variant="secondary"
+            size="small"
+            onClick={() => navigate("/ranking")}
+          >
+            랭킹보기
+          </Button>
           <Button variant="secondary" size="small" onClick={handleLogout}>
             로그아웃
           </Button>

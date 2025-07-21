@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import {
   CreateProblemPage,
   HomePage,
+  RankingPage,
   ResultPage,
   SessionPage,
   SignUpPage,
@@ -19,6 +20,7 @@ function App() {
           <Route path="/result/:sessionId" element={<ResultPage />} />
           <Route path="/create-problem" element={<CreateProblemPage />} />
           <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/ranking" element={<RankingPage />} />
 
           {/* 404 처리 */}
           <Route path="*" element={<Navigate to="/" replace />} />
