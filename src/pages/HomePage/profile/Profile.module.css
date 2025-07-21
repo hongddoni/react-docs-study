@@ -1,23 +1,24 @@
 .userInfo {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .userActions {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+}
 
-  .userSection {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    padding: 20px;
-    background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 32px;
-  }
+.userActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.userSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 32px;
+}

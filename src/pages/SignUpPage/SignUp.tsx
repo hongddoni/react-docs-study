@@ -24,6 +24,7 @@ export const SignUp = () => {
       id,
       access: {
         lastSession: 1,
+        isManager: false,
       },
     });
   }, []);
