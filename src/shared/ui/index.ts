@@ -14,3 +14,6 @@ export type {
 	AnswerType,
 	SelectionMode,
 } from "./Answer";
+
+export { Title } from "./Title";
+export { Textarea } from "./Textarea";

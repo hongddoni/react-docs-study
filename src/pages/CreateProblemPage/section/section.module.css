@@ -1,0 +1,71 @@
+.section {
+	background-color: white;
+	border-radius: 12px;
+	padding: 24px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sectionTitle {
+	font-size: 18px;
+	font-weight: 600;
+	color: #333;
+	margin: 0 0 20px 0;
+	border-bottom: 2px solid #007bff;
+	padding-bottom: 8px;
+}
+
+.field {
+	margin-bottom: 20px;
+}
+
+/* 선택지 관리 */
+.optionsContainer {
+	margin-top: 20px;
+}
+
+.optionsHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 16px;
+}
+
+.optionsHeader h3 {
+	font-size: 16px;
+	font-weight: 600;
+	color: #333;
+	margin: 0;
+}
+
+.optionItem {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 12px;
+	padding: 12px;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	background-color: #f8f9fa;
+}
+
+.optionLabel {
+	font-weight: 600;
+	color: #666;
+	min-width: 20px;
+	text-align: center;
+}
+
+.optionItem .container {
+	flex: 1;
+}
+
+/* 에러 메시지 */
+.errorMessage {
+	color: #dc3545;
+	font-size: 14px;
+	margin-bottom: 12px;
+	padding: 8px 12px;
+	background-color: #f8d7da;
+	border: 1px solid #f5c6cb;
+	border-radius: 4px;
+}

@@ -4,7 +4,6 @@ import styles from "./Question.module.css";
 export interface QuestionProps {
 	title: string;
 	description?: string;
-	imageUrl?: string;
 	questionNumber?: number;
 	totalQuestions?: number;
 }
@@ -12,7 +11,6 @@ export interface QuestionProps {
 export const Question: FC<QuestionProps> = ({
 	title,
 	description,
-	imageUrl,
 	questionNumber,
 	totalQuestions,
 }) => {
@@ -31,16 +29,6 @@ export const Question: FC<QuestionProps> = ({
 
 				{description && (
 					<p className={styles.description}>{description}</p>
-				)}
-
-				{imageUrl && (
-					<div className={styles.imageContainer}>
-						<img
-							src={imageUrl}
-							alt="문제 이미지"
-							className={styles.image}
-						/>
-					</div>
 				)}
 			</div>
 		</div>

@@ -47,6 +47,16 @@
   background-color: #c82333;
 }
 
+.ghost {
+  background-color: transparent;
+  color: #a4a4a4;
+}
+
+.ghost:hover:not(:disabled) {
+  background-color: #a4a4a4;
+  color: white;
+}
+
 /* Sizes */
 .small {
   padding: 6px 12px;
