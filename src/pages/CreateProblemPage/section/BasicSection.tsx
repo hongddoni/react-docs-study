@@ -1,4 +1,4 @@
-import { Textarea, TextInput } from "@/shared/ui";
+import { CodeBlock, Textarea, TextInput } from "@/shared/ui";
 import styles from "./section.module.css";
 import { useForm } from "../context/useForm";
 
@@ -20,6 +20,7 @@ export const BasicSection = () => {
 			</div>
 
 			<div className={styles.field}>
+				<CodeBlock language="javascript">{form.description}</CodeBlock>
 				<Textarea
 					label="문제 설명"
 					value={form.description}

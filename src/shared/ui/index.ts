@@ -17,3 +17,5 @@ export type {
 
 export { Title } from "./Title";
 export { Textarea } from "./Textarea";
+
+export { CodeBlock } from "./CodeBlock";
