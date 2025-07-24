@@ -66,6 +66,8 @@ export const useForm = () => {
   const handleSave = async () => {
     if (!validateForm()) return;
 
+    console.log(form);
+
     try {
       const newQuestion: QuestionForm = {
         title: form.title,
