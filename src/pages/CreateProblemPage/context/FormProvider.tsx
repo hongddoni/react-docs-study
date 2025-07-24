@@ -1,41 +1,46 @@
-import { createContext, useState } from "react";
+import { createContext, useCallback, useState } from "react";
 import type { QuestionForm } from "../types";
 
 const initialForm: QuestionForm = {
-	title: "",
-	description: "",
-	answerType: "multiple-choice",
-	selectionMode: "single",
-	options: [
-		{ id: "a", text: "" },
-		{ id: "b", text: "" },
-	],
-	correctAnswer: [],
-	explanation: "",
-	sessionId: "2",
+  title: "",
+  description: "",
+  answerType: "multiple-choice",
+  selectionMode: "single",
+  options: [
+    { id: "a", text: "" },
+    { id: "b", text: "" },
+  ],
+  correctAnswer: [],
+  explanation: "",
+  sessionId: "2",
+  code: "",
 };
 
 interface FormContextType {
-	form: QuestionForm;
-	setForm: (form: QuestionForm) => void;
-	errors: Record<string, string>;
-	setErrors: (errors: Record<string, string>) => void;
-	initialForm: QuestionForm;
+  form: QuestionForm;
+  errors: Record<string, string>;
+  setErrors: (errors: Record<string, string>) => void;
+  initialForm: QuestionForm;
+  onFormChange: (form: QuestionForm) => void;
 }
 
 export const FormContext = createContext<FormContextType | undefined>(
-	undefined
+  undefined
 );
 
 export const FormProvider = ({ children }: { children: React.ReactNode }) => {
-	const [form, setForm] = useState<QuestionForm>(initialForm);
-	const [errors, setErrors] = useState<Record<string, string>>({});
+  const [form, setForm] = useState<QuestionForm>(initialForm);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-	return (
-		<FormContext.Provider
-			value={{ form, setForm, initialForm, errors, setErrors }}
-		>
-			{children}
-		</FormContext.Provider>
-	);
+  const onFormChange = useCallback((form: QuestionForm) => {
+    setForm(form);
+  }, []);
+
+  return (
+    <FormContext.Provider
+      value={{ form, initialForm, errors, setErrors, onFormChange }}
+    >
+      {children}
+    </FormContext.Provider>
+  );
 };

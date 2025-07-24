@@ -227,7 +227,6 @@ export const ResultPage = () => {
                     <Question
                       title={result.question.title}
                       description={result.question.description}
-                      imageUrl={result.question.imageUrl}
                     />
                   </div>
                   <div className={styles.answerSection}>
