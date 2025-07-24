@@ -10,7 +10,6 @@ export interface DatabaseQuestion {
 	id: string;
 	title: string;
 	description?: string;
-	image_url?: string;
 	answer_type: "subjective" | "multiple-choice";
 	selection_mode?: "single" | "multiple";
 	options?: Array<{
@@ -24,6 +23,7 @@ export interface DatabaseQuestion {
 	session_id: string;
 	created_at?: string;
 	updated_at?: string;
+	code: string | null;
 }
 
 export interface DatabaseSession {

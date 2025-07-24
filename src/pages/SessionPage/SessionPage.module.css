@@ -1,83 +1,83 @@
 .container {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
-  min-height: 100vh;
-  background-color: #f8f9fa;
+	max-width: 400px;
+	margin: 0 auto;
+	padding: 20px;
+	min-height: 100vh;
+	background-color: #f8f9fa;
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 24px;
 }
 
 .sessionInfo {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
+	font-size: 16px;
+	font-weight: 600;
+	color: #333;
 }
 
 .content {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
 }
 
 .navigation {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 32px;
-  padding: 20px;
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	display: flex;
+	justify-content: space-between;
+	gap: 12px;
+	margin-top: 32px;
+	padding: 20px;
+	background-color: white;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .navigation button {
-  flex: 1;
+	flex: 1;
 }
 
 /* 로딩 및 에러 상태 스타일 추가 */
 .loading,
 .error {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  margin-top: 50px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 40px 20px;
+	background-color: white;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	text-align: center;
+	margin-top: 50px;
 }
 
 .loading p,
 .error p {
-  font-size: 16px;
-  color: #666;
-  margin: 0 0 20px 0;
+	font-size: 16px;
+	color: #666;
+	margin: 0 0 20px 0;
 }
 
 .error p {
-  color: #dc3545;
+	color: #dc3545;
 }
 
 @media (max-width: 480px) {
-  .container {
-    padding: 16px;
-  }
-  
-  .navigation {
-    padding: 16px;
-    gap: 8px;
-  }
-  
-  .loading,
-  .error {
-    padding: 30px 16px;
-  }
-} 
+	.container {
+		padding: 16px;
+	}
+
+	.navigation {
+		padding: 16px;
+		gap: 8px;
+	}
+
+	.loading,
+	.error {
+		padding: 30px 16px;
+	}
+}

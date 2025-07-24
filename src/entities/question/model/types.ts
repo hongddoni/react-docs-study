@@ -1,16 +1,17 @@
 import type { AnswerOption, AnswerType, SelectionMode } from "@/shared/ui";
 
 export interface Question {
-  id: string;
-  title: string;
-  description?: string;
-  answerType: AnswerType;
-  selectionMode?: SelectionMode;
-  options?: AnswerOption[];
-  correctAnswer?: string[];
-  explanation?: string; // 해설 필드 추가
-  order: number;
-  sessionId: string;
+	id: string;
+	title: string;
+	description?: string;
+	imageUrl?: string;
+	answerType: AnswerType;
+	selectionMode?: SelectionMode;
+	options?: AnswerOption[];
+	correctAnswer?: string[];
+	explanation?: string; // 해설 필드 추가
+	order: number;
+	sessionId: string;
   code?: string;
 }
 

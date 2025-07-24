@@ -15,8 +15,15 @@ export const CodeBlock = ({
 }: CodeBlockProps) => {
   return (
     <SyntaxHighlighter
-      className={classNames(styles.container, className)}
-      language={language}
+     
+			className={classNames(styles.container, className)}
+     
+			language={language}
+			wrapLines
+			showLineNumbers
+			wrapLongLines
+			useInlineStyles
+		
     >
       {children}
     </SyntaxHighlighter>
