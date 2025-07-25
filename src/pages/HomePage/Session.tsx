@@ -14,6 +14,7 @@ export const Session = () => {
 
   const sessions = useMemo(
     () => [
+      { id: "0", title: "0차시: 기초 문제", sessionNumber: 0 },
       { id: "1", title: "1차시: 기초 문제", sessionNumber: 1 },
       { id: "2", title: "2차시: 중급 문제", sessionNumber: 2 },
       { id: "3", title: "3차시: 고급 문제", sessionNumber: 3 },

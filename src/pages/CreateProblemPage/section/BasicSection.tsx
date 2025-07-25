@@ -35,9 +35,7 @@ export const BasicSection = () => {
           onChange={(value) => updateForm("code", value)}
           placeholder="코드를 입력하세요"
         />
-        <CodeBlock language="javascript" className={styles.code}>
-          {form.code}
-        </CodeBlock>
+        <CodeBlock language="typescript">{form.code}</CodeBlock>
       </div>
 
       <div className={styles.field}>

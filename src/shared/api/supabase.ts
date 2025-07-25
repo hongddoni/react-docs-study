@@ -7,42 +7,42 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Supabase 데이터베이스 타입 정의
 export interface DatabaseQuestion {
-	id: string;
-	title: string;
-	description?: string;
-	answer_type: "subjective" | "multiple-choice";
-	selection_mode?: "single" | "multiple";
-	options?: Array<{
-		id: string;
-		text: string;
-		is_correct?: boolean;
-	}>;
-	correct_answer: string | string[];
-	explanation?: string;
-	order: number;
-	session_id: string;
-	created_at?: string;
-	updated_at?: string;
-	code: string | null;
+  id: string;
+  title: string;
+  description?: string;
+  answer_type: "subjective" | "multiple-choice";
+  selection_mode?: "single" | "multiple";
+  options?: Array<{
+    id: string;
+    text: string;
+    is_correct?: boolean;
+  }>;
+  correct_answer: string | string[];
+  explanation?: string;
+  order: number;
+  session_id: string;
+  created_at?: string;
+  updated_at?: string;
+  code?: string;
 }
 
 export interface DatabaseSession {
-	id: string;
-	title: string;
-	description?: string;
-	session_number: number;
-	is_locked: boolean;
-	required_permission?: string;
-	created_at?: string;
-	updated_at?: string;
+  id: string;
+  title: string;
+  description?: string;
+  session_number: number;
+  is_locked: boolean;
+  required_permission?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface DatabaseUserAnswer {
-	id: string;
-	user_id: string;
-	question_id: string;
-	session_id: string;
-	answer: string | string[];
-	is_correct: boolean;
-	submitted_at: string;
+  id: string;
+  user_id: string;
+  question_id: string;
+  session_id: string;
+  answer: string | string[];
+  is_correct: boolean;
+  submitted_at: string;
 }

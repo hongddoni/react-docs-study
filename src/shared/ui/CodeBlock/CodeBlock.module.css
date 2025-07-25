@@ -1,2 +1,14 @@
 .container {
+  position: relative;
+
+  .controls {
+    gap: 10px;
+    bottom: 0;
+    right: 0;
+  }
+
+  .controls {
+    display: flex;
+    gap: 10px;
+  }
 }

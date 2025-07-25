@@ -18,26 +18,26 @@ export const fetchQuestionsBySession = async (
 
     if (error) throw error;
 
-		// 데이터베이스 형식을 앱 형식으로 변환
-		return data.map((dbQuestion: DatabaseQuestion) => ({
-			id: dbQuestion.id,
-			title: dbQuestion.title,
-			description: dbQuestion.description,
-			answerType: dbQuestion.answer_type,
-			selectionMode: dbQuestion.selection_mode,
-			options: dbQuestion.options,
-			correctAnswer: Array.isArray(dbQuestion.correct_answer)
-				? dbQuestion.correct_answer
-				: [dbQuestion.correct_answer],
-			explanation: dbQuestion.explanation,
-			order: dbQuestion.order,
-			sessionId: dbQuestion.session_id,
-			code: dbQuestion.code,
-		}));
-	} catch (error) {
-		console.error("문제 불러오기 실패:", error);
-		return [];
-	}
+    // 데이터베이스 형식을 앱 형식으로 변환
+    return data.map((dbQuestion: DatabaseQuestion) => ({
+      id: dbQuestion.id,
+      title: dbQuestion.title,
+      description: dbQuestion.description,
+      answerType: dbQuestion.answer_type,
+      selectionMode: dbQuestion.selection_mode,
+      options: dbQuestion.options,
+      correctAnswer: Array.isArray(dbQuestion.correct_answer)
+        ? dbQuestion.correct_answer
+        : [dbQuestion.correct_answer],
+      explanation: dbQuestion.explanation,
+      order: dbQuestion.order,
+      sessionId: dbQuestion.session_id,
+      code: dbQuestion.code,
+    }));
+  } catch (error) {
+    console.error("문제 불러오기 실패:", error);
+    return [];
+  }
 };
 
 // 정답 제출 및 확인 (POST API)

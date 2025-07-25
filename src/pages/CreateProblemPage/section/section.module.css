@@ -31,13 +31,6 @@
     display: flex;
     flex: 1;
   }
-
-  .code {
-    display: flex;
-    flex: 1;
-    min-width: 50%;
-    max-width: 50%;
-  }
 }
 
 .options {

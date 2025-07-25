@@ -1,31 +1,39 @@
-import classNames from "classnames";
+import { useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { Button } from "../Button";
 import styles from "./CodeBlock.module.css";
 
 interface CodeBlockProps {
   language: string;
   children: string;
-  className?: string;
 }
 
-export const CodeBlock = ({
-  language,
-  children,
-  className,
-}: CodeBlockProps) => {
+export const CodeBlock = ({ language, children }: CodeBlockProps) => {
+  const [fontSize, setFontSize] = useState(10);
   return (
-    <SyntaxHighlighter
-     
-			className={classNames(styles.container, className)}
-     
-			language={language}
-			wrapLines
-			showLineNumbers
-			wrapLongLines
-			useInlineStyles
-		
-    >
-      {children}
-    </SyntaxHighlighter>
+    <div className={styles.container}>
+      <SyntaxHighlighter
+        language={language}
+        customStyle={{ fontSize: `${fontSize}px`, maxHeight: "50vh" }}
+      >
+        {children}
+      </SyntaxHighlighter>
+      <div className={styles.controls}>
+        <Button
+          variant="secondary"
+          onClick={() => setFontSize(fontSize - 1)}
+          fullWidth
+        >
+          -
+        </Button>
+        <Button
+          variant="secondary"
+          onClick={() => setFontSize(fontSize + 1)}
+          fullWidth
+        >
+          +
+        </Button>
+      </div>
+    </div>
   );
 };
