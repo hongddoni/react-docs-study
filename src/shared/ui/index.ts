@@ -19,3 +19,5 @@ export { Title } from "./Title";
 export { Textarea } from "./Textarea";
 
 export { CodeBlock } from "./CodeBlock";
+
+export { Slider } from "./Slider";
